@@ -26,7 +26,9 @@ struct user *read_user(FILE *fp)
 {
     struct user *new_user = malloc(sizeof(struct user));
     if (NULL != new_user) {
-        if (fread(new_user, sizeof(struct user), 1, fp) != sizeof(struct user)) {
+        size_t size_read = fread(new_user, 1, sizeof(struct user), fp);
+        if ( size_read != sizeof(struct user)) {
+            printf("%s: failed to read full size of a user. expected %lu, got %lu\n", __func__, sizeof(struct user), size_read);
             // Failed to read sufficient data
             free(new_user);
             new_user = NULL;
